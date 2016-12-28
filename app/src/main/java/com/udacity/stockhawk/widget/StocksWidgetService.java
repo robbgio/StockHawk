@@ -79,7 +79,7 @@ class StocksRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
             mStocksCursor.close();
         }
         mStocksCursor = mContext.getContentResolver().query(Contract.Quote.URI, null, null,
-                null, null);
+                null, Contract.Quote.COLUMN_SYMBOL);
         mCount = mStocksCursor.getCount();
     }
 

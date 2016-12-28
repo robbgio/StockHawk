@@ -21,17 +21,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.StockHistoryDetailActivity"></activity>
+        <activity android:name=".ui.StockHistoryDetailActivity"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity">
+            </meta-data>
+        </activity>
 
         <service
             android:name=".sync.QuoteIntentService"
             android:exported="false" />
-
         <provider
             android:name=".data.StockProvider"
             android:authorities="com.udacity.stockhawk"
             android:exported="true" />
-
         <service
             android:name=".sync.QuoteJobService"
             android:enabled="true"

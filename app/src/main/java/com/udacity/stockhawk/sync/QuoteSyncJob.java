@@ -73,7 +73,15 @@ public final class QuoteSyncJob {
 
 
                 Stock stock = quotes.get(symbol);
+                if (stock==null) {
+                    PrefUtils.removeStock(context, symbol);
+                    continue;
+                }
                 StockQuote quote = stock.getQuote();
+                if (quote.getPrice()==null) { // symbol present but no data
+                    PrefUtils.removeStock(context, quote.getSymbol());
+                    continue;
+                }
 
                 float price = quote.getPrice().floatValue();
                 float change = quote.getChange().floatValue();
