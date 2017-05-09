@@ -39,6 +39,7 @@ public final class PrefUtils {
 
     private static void editStockPref(Context context, String symbol, Boolean add) {
         String key = context.getString(R.string.pref_stocks_key);
+        symbol = symbol.toUpperCase(); // prevent duplicate entries for lowercase and uppercase entries
         Set<String> stocks = getStocks(context);
 
         if (add) {

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:background="@color/colorWhite"
     tools:context=".ui.StockHistoryDetailActivity">
     <TextView
         android:layout_width="match_parent"
@@ -17,8 +17,8 @@
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="40dp"
         android:background="@android:color/darker_gray"
         android:elevation="@dimen/fab_size_normal"/>

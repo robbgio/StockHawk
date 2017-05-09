@@ -2,7 +2,6 @@ package com.udacity.stockhawk.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -27,8 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class StockHistoryDetailActivity extends AppCompatActivity {
-    String[] months = new String[] { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-        "JUL", "AUG", "SEP", "OCT","NOV","DEC"};
+    String[] months;
     String [] xAxisLabels;
     Cursor mStocksCursor;
     int mPosition;
@@ -36,16 +34,30 @@ public class StockHistoryDetailActivity extends AppCompatActivity {
     String priceString;
     Float priceFloat;
     String history;
-    private DecimalFormat dollarFormat;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        months = new String[] {
+                getString(R.string.January),
+                getString(R.string.February),
+                getString(R.string.March),
+                getString(R.string.April),
+                getString(R.string.May),
+                getString(R.string.June),
+                getString(R.string.July),
+                getString(R.string.August),
+                getString(R.string.September),
+                getString(R.string.October),
+                getString(R.string.November),
+                getString(R.string.December),
+        };
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+        DecimalFormat dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
 
         Intent intent = getIntent();
         mPosition = intent.getExtras().getInt("Position");
@@ -55,7 +67,7 @@ public class StockHistoryDetailActivity extends AppCompatActivity {
         String[] historyMonths = new String[0];
         int historyNumberOfMonths=0;
 
-        if (mStocksCursor.moveToPosition(mPosition)) {
+        if (mStocksCursor != null && mStocksCursor.moveToPosition(mPosition)) {
             symbolIndex = mStocksCursor.getColumnIndex(Contract.Quote.COLUMN_SYMBOL);
             symbol = mStocksCursor.getString(symbolIndex);
 
@@ -64,7 +76,7 @@ public class StockHistoryDetailActivity extends AppCompatActivity {
             priceString = dollarFormat.format(priceFloat);
             historyMonths = history.split("\n");
             historyNumberOfMonths = historyMonths.length;
-            xAxisLabels = new String [historyNumberOfMonths + 1];
+            xAxisLabels = new String[historyNumberOfMonths + 1];
         }
 
         if (mStocksCursor!=null) mStocksCursor.close();
@@ -75,9 +87,9 @@ public class StockHistoryDetailActivity extends AppCompatActivity {
         TextView titleView = (TextView) findViewById(R.id.title);
         titleView.setText(symbol +" - " + priceString);
 
-        List<Entry> entries = new ArrayList<Entry>();
+        List<Entry> entries = new ArrayList<>();
         if (historyNumberOfMonths>12) historyNumberOfMonths = 12;
-        for (int i=historyNumberOfMonths; i > 0; i--) {
+        for (int i=historyNumberOfMonths-1; i >= 0; i--) {
             int monthInteger;
             int year;
             String[] historyOneMonth = historyMonths[i].split(",");
@@ -87,14 +99,14 @@ public class StockHistoryDetailActivity extends AppCompatActivity {
             year = date.getYear()-100;
             xAxisLabels[historyNumberOfMonths - i] = months[monthInteger] + "-" + year;
         }
-        xAxisLabels[historyNumberOfMonths] = "CUR"; // Label for current
+        xAxisLabels[historyNumberOfMonths] = getString(R.string.Current); // Label for current
         entries.add(new Entry((float) historyNumberOfMonths, priceFloat));
 
         LineDataSet dataSet = new LineDataSet(entries, symbol);
         LineData lineData = new LineData(dataSet);
         dataSet.setLineWidth(4.0f);
-        dataSet.setColor(Color.parseColor("#2196F3"));
-        dataSet.setCircleColor(Color.parseColor("#2196F3"));
+        dataSet.setColor(R.color.graph_line);
+        dataSet.setCircleColor(R.color.graph_line);
         dataSet.setValueTextSize(10.0f);
 
         IAxisValueFormatter formatter = new IAxisValueFormatter() {
@@ -108,7 +120,7 @@ public class StockHistoryDetailActivity extends AppCompatActivity {
 
 
         Description desc = new Description();
-        desc.setText("Stock Prices - " + historyNumberOfMonths + " months");
+        desc.setText(getString(R.string.Stock_Prices) + " - " + historyNumberOfMonths + " " + getString(R.string.months));
         chart.setDescription(desc);
 
         XAxis xAxis = chart.getXAxis();
